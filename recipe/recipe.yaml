@@ -1,5 +1,5 @@
 context:
-  version: "1.1.2"
+  version: "1.2.0"
 
 package:
   name: uniclip
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/UniClipboard/UniClipboard/archive/v${{ version }}.tar.gz
-  sha256: 63eb2b47f60a678cbe4f1e5587d48271711507d733939d88c88086af3071fac8
+  sha256: ac3890cde2898fb4b12e5b53f7ab3019d52c57a09f212ab71f8228c1b27694dd
 
 build:
   number: 0
@@ -19,16 +19,19 @@ build:
       - cargo-bundle-licenses --format yaml --output ./THIRDPARTY.yml
       - if: unix
         then:
+          - mkdir -p "${PREFIX}/bin"
+          - go -C apps/cli-go build -trimpath -buildvcs=false -ldflags "-s -w" -o "${PREFIX}/bin/uniclip" ./cmd/uniclip
           - cargo auditable install -j ${CPU_COUNT} --root "${PREFIX}" --path apps/daemon --locked --no-track
-          - cargo auditable install -j ${CPU_COUNT} --root "${PREFIX}" --path apps/cli --locked --no-track
         else:
+          - if not exist "%PREFIX%\bin" mkdir "%PREFIX%\bin"
+          - go -C apps/cli-go build -trimpath -buildvcs=false -ldflags "-s -w" -o "%PREFIX%\bin\uniclip.exe" ./cmd/uniclip
           - cargo auditable install -j %CPU_COUNT% --root "%PREFIX%" --path apps/daemon --locked --no-track
-          - cargo auditable install -j %CPU_COUNT% --root "%PREFIX%" --path apps/cli --locked --no-track
 
 requirements:
   build:
     - ${{ stdlib('c') }}
     - ${{ compiler('rust') }}
+    - ${{ compiler("go-nocgo") }}
     - cargo-bundle-licenses
     - cargo-auditable
     - if: linux
