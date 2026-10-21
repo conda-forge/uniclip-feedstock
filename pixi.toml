@@ -5,7 +5,7 @@
 
 [workspace]
 name = "uniclip-feedstock"
-version = "2026.9.23"  # conda-smithy version used to generate this file
+version = "2026.10.21"  # conda-smithy version used to generate this file
 description = "Pixi configuration for conda-forge/uniclip-feedstock"
 authors = ["@conda-forge/uniclip"]
 channels = ["conda-forge"]
