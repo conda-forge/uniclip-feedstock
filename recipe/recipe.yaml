@@ -19,16 +19,19 @@ build:
       - cargo-bundle-licenses --format yaml --output ./THIRDPARTY.yml
       - if: unix
         then:
+          - mkdir -p "${PREFIX}/bin"
+          - go -C apps/cli-go build -trimpath -buildvcs=false -ldflags "-s -w" -o "${PREFIX}/bin/uniclip" ./cmd/uniclip
           - cargo auditable install -j ${CPU_COUNT} --root "${PREFIX}" --path apps/daemon --locked --no-track
-          - cargo auditable install -j ${CPU_COUNT} --root "${PREFIX}" --path apps/cli --locked --no-track
         else:
+          - if not exist "%PREFIX%\bin" mkdir "%PREFIX%\bin"
+          - go -C apps/cli-go build -trimpath -buildvcs=false -ldflags "-s -w" -o "%PREFIX%\bin\uniclip.exe" ./cmd/uniclip
           - cargo auditable install -j %CPU_COUNT% --root "%PREFIX%" --path apps/daemon --locked --no-track
-          - cargo auditable install -j %CPU_COUNT% --root "%PREFIX%" --path apps/cli --locked --no-track
 
 requirements:
   build:
     - ${{ stdlib('c') }}
     - ${{ compiler('rust') }}
+    - ${{ compiler("go-nocgo") }}
     - cargo-bundle-licenses
     - cargo-auditable
     - if: linux
