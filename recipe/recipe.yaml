@@ -1,5 +1,5 @@
 context:
-  version: "1.3.1"
+  version: "1.4.0"
 
 package:
   name: uniclip
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/UniClipboard/UniClipboard/archive/v${{ version }}.tar.gz
-  sha256: 3e50dca247c783eab83d81a12bc441f334e212359c45deb1e043fa7a6c52bb81
+  sha256: bce3844255ed724fc3ad21da05e54ed1b08987e60c305849dbb9ed2e1a7e23f7
 
 build:
   number: 0
